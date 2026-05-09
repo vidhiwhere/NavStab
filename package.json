@@ -1,0 +1,25 @@
+{
+  "name": "navstab",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^8.0.10"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.14.0",
+    "plotly.js": "^3.5.1",
+    "react-plotly.js": "^2.6.0",
+    "three": "^0.184.0",
+    "xlsx": "^0.18.5",
+    "zustand": "^5.0.13"
+  }
+}
