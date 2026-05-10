@@ -18,7 +18,10 @@ export function renderGZCurve(container) {
   container.innerHTML = buildShell();
   subscribe('gzCurve', gz => _plot(gz));
   subscribe('hydro', h => _updateCriteria(h, getState().gzCurve));
-  _plot(getState().gzCurve);
+  // Defer first render so the DOM is fully painted and Plotly can measure dimensions
+  requestAnimationFrame(() => {
+    _plot(getState().gzCurve);
+  });
 }
 
 function buildShell() {
@@ -29,7 +32,7 @@ function buildShell() {
       </svg>
       <h2>GZ Righting Lever Curve</h2>
     </div>
-    <p class="panel-sub">Wall-sided formula GZ curve from 0° to 90°. IMO A.749(18) intact stability criteria checked below.</p>
+    <p class="panel-sub">Wall-sided formula GZ curve from 0° to 60° (valid range for this formula). IMO A.749(18) intact stability criteria checked below.</p>
     <div id="gz-plot" class="gz-plot-div"></div>
     <div class="gz-bottom">
       <div id="gz-stats" class="gz-stats"></div>
@@ -65,13 +68,13 @@ function _plot(gzCurve) {
     },
     // IMO minimum GZ line at 0.2 m
     {
-      x: [30, 90], y: [0.2, 0.2], name: 'IMO min GZ = 0.2m',
+      x: [30, 60], y: [0.2, 0.2], name: 'IMO min GZ = 0.2m',
       type: 'scatter', mode: 'lines',
       line: { color: '#ef4444', width: 1.5, dash: 'dash' },
     },
     // Zero line
     {
-      x: [0, 90], y: [0, 0], name: 'GZ = 0',
+      x: [0, 60], y: [0, 0], name: 'GZ = 0',
       type: 'scatter', mode: 'lines',
       line: { color: '#475569', width: 1 },
       showlegend: false,
@@ -83,7 +86,7 @@ function _plot(gzCurve) {
     plot_bgcolor: 'rgba(17,24,39,0.6)',
     font: { color: '#94a3b8', family: 'Inter, sans-serif', size: 11 },
     margin: { l: 55, r: 20, t: 20, b: 50 },
-    xaxis: { title: 'Heel Angle θ (°)', range: [0, 90], gridcolor: '#1f2d4a', zerolinecolor: '#1f2d4a', dtick: 10 },
+    xaxis: { title: 'Heel Angle θ (°)', range: [0, 60], gridcolor: '#1f2d4a', zerolinecolor: '#1f2d4a', dtick: 10 },
     yaxis: { title: 'GZ (m)', gridcolor: '#1f2d4a', zerolinecolor: '#334155' },
     legend: { orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center', bgcolor: 'transparent' },
     shapes: [

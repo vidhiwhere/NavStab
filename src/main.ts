@@ -95,6 +95,11 @@ app.innerHTML = `
   <!-- Main -->
   <div class="main-area">
     <header class="topbar">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
       <div class="topbar-title" id="topbar-title">Hydrostatic Summary</div>
       <div class="topbar-ship" id="topbar-ship">Loading…</div>
       <div class="status-dot" title="Engine active"></div>
@@ -128,17 +133,38 @@ function navigateTo(sectionId: string) {
   if (!sectionCache[sectionId]) {
     const el = document.createElement('div');
     el.id = `section-${sectionId}`;
-    RENDERERS[sectionId]?.(el);
     sectionCache[sectionId] = el;
+    contentArea.appendChild(el); // append FIRST so DOM is live for rAF in renderers
+    RENDERERS[sectionId]?.(el);
+  } else {
+    contentArea.appendChild(sectionCache[sectionId]);
   }
-  contentArea.appendChild(sectionCache[sectionId]);
   setActiveSection(sectionId);
 }
 
 // Attach nav click handlers
 document.getElementById('sidebar-nav')!.addEventListener('click', e => {
   const item = (e.target as HTMLElement).closest('.nav-item') as HTMLElement | null;
-  if (item?.dataset.section) navigateTo(item.dataset.section);
+  if (item?.dataset.section) {
+    navigateTo(item.dataset.section);
+    document.getElementById('sidebar')?.classList.remove('open');
+  }
+});
+
+// Mobile sidebar toggle
+document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const toggle = document.getElementById('sidebar-toggle');
+  if (sidebar?.classList.contains('open') &&
+      !sidebar.contains(e.target as Node) &&
+      !toggle?.contains(e.target as Node)) {
+    sidebar.classList.remove('open');
+  }
 });
 
 // Update topbar ship info reactively
@@ -148,9 +174,6 @@ function updateTopbar() {
 }
 subscribe('ship', updateTopbar);
 updateTopbar();
-
-// Subscribe to navigation events
-subscribe('navigate', (id: string) => navigateTo(id));
 
 // Boot to dashboard
 navigateTo('dashboard');

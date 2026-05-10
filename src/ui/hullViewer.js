@@ -23,8 +23,11 @@ export function renderHullViewer(container) {
     </div>
   `;
 
-  initThree();
-  buildHull(getState().offsetTable);
+  // Double rAF: first ensures DOM is in document, second ensures layout/paint
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    initThree();
+    buildHull(getState().offsetTable);
+  }));
   subscribe('offsetTable', t => buildHull(t));
   subscribe('ship', () => buildHull(getState().offsetTable));
 }

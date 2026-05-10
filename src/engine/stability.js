@@ -39,14 +39,16 @@ export function calculateKN(KB, BM, thetaDeg) {
 }
 
 /**
- * Generate GZ curve data points from 0° to 90°
+ * Generate GZ curve data points from 0° to 60° (wall-sided formula valid range)
  * @param {Object} hydro - hydrostatics result { GM, BM, KB, KG }
- * @param {number[]} angles - array of angles in degrees (default 0-90 step 5)
+ * @param {number[]} angles - array of angles in degrees (default 0-60 step 3)
  * @returns {Object[]} array of { angle, GZ, KN }
  */
 export function generateGZCurve(hydro, angles = null) {
   const { GM, BM, KB, KG } = hydro;
-  const evalAngles = angles || Array.from({ length: 19 }, (_, i) => i * 5); // 0 to 90
+  // Wall-sided formula is valid for moderate angles (< 60°).
+  // At 90°, tan²θ = ∞, causing overflow. Limit to 60° for physical realism.
+  const evalAngles = angles || Array.from({ length: 21 }, (_, i) => i * 3); // 0 to 60° in 3° steps
 
   return evalAngles.map(deg => {
     const GZ = wallSidedGZ(GM, BM, deg);
@@ -111,7 +113,7 @@ export function findVanishingAngle(gzCurve) {
       }
     }
   }
-  return gzCurve[gzCurve.length - 1].angle; // assume still positive at 90°
+  return gzCurve[gzCurve.length - 1].angle; // GZ still positive at curve limit (>85°)
 }
 
 /**

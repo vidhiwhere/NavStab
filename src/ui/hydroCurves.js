@@ -6,7 +6,10 @@ import { getState, subscribe } from '../store.js';
 export function renderHydroCurves(container) {
   container.innerHTML = buildShell();
   subscribe('hydroCurves', curves => plotAll(curves));
-  plotAll(getState().hydroCurves);
+  // Defer first render so chart containers are in the DOM and sized
+  requestAnimationFrame(() => {
+    plotAll(getState().hydroCurves);
+  });
 }
 
 function buildShell() {
