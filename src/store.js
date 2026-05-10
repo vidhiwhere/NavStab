@@ -68,7 +68,8 @@ export function setOffsetTable(table) {
 
 export function setActiveSection(section) {
   state.activeSection = section;
-  emit('navigate', section);
+  // Note: do NOT emit 'navigate' here — main.ts calls navigateTo which calls setActiveSection;
+  // re-emitting 'navigate' from here would create an infinite loop.
 }
 
 // ── Boot: generate default offset table immediately ──────────────────────────
