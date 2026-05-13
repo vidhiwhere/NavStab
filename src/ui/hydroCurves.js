@@ -28,6 +28,8 @@ function buildShell() {
       <div class="chart-card"><div class="chart-title">KM vs Draft</div><div id="hc-km" class="chart-div"></div></div>
       <div class="chart-card"><div class="chart-title">GM vs Draft</div><div id="hc-gm" class="chart-div"></div></div>
       <div class="chart-card"><div class="chart-title">TPC vs Draft</div><div id="hc-tpc" class="chart-div"></div></div>
+      <div class="chart-card"><div class="chart-title">MCTC vs Draft</div><div id="hc-mctc" class="chart-div"></div></div>
+      <div class="chart-card"><div class="chart-title">LCB vs Draft</div><div id="hc-lcb" class="chart-div"></div></div>
     </div>`;
 }
 
@@ -50,6 +52,8 @@ function plotAll(curves) {
   chart('hc-km', drafts, curves.map(c => c.KM), 'KM (m)', '#06b6d4');
   chart('hc-gm', drafts, curves.map(c => c.GM), 'GM (m)', '#10b981');
   chart('hc-tpc', drafts, curves.map(c => c.TPC), 'TPC (t/cm)', '#f59e0b');
+  chart('hc-mctc', drafts, curves.map(c => c.MCTC), 'MCTC (t·m/cm)', '#ec4899');
+  chart('hc-lcb', drafts, curves.map(c => c.LCB_AP), 'LCB (m)', '#8b5cf6');
 }
 
 function chart(id, x, y, yLabel, color) {
