@@ -3,9 +3,9 @@
  * Demonstrates how to use the NavStab calculation engine programmatically
  */
 
-import { DEFAULT_SHIP, generateOffsetTable } from './engine/hullGenerator.js';
-import { calculateHydrostatics } from './engine/hydrostatics.js';
-import { generateGZCurve } from './engine/stability.js';
+import { DEFAULT_SHIP, generateOffsetTable } from './src/engine/hullGenerator.js';
+import { calculateHydrostatics } from './src/engine/hydrostatics.js';
+import { generateGZCurve } from './src/engine/stability.js';
 
 // Example: Calculate hydrostatics for a sample vessel
 function calculateSampleVessel() {
